@@ -1,23 +1,13 @@
-import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { mockExpenses } from '../lib/expenseData';
-import { TrendingUp, Calendar, PieChart as PieChartIcon, Sparkles } from 'lucide-react';
+import { TrendingUp, Calendar, PieChart as PieChartIcon } from 'lucide-react';
 
 export function Analytics() {
-  // Color mapping for categories
-  const categoryColors: { [key: string]: string } = {
-    'Food & Dining': '#3b82f6',
-    'Transportation': '#8b5cf6',
-    'Shopping': '#ec4899',
-    'Entertainment': '#f59e0b',
-    'Bills & Utilities': '#10b981',
-    'Healthcare': '#06b6d4',
-    'Travel': '#f97316',
-    'Education': '#6366f1',
-    'Receipt': '#64748b',
-    'Other': '#94a3b8'
-  };
-
-  // Category spending data
+  // Calculate analytics data
+  const totalExpenses = mockExpenses.length;
+  const avgTransaction = mockExpenses.reduce((sum, e) => sum + e.amount, 0) / totalExpenses;
+  
+  // Calculate category percentages and top category
   const categoryData = mockExpenses.reduce((acc, expense) => {
     const existing = acc.find(item => item.name === expense.category);
     if (existing) {
@@ -25,222 +15,193 @@ export function Analytics() {
     } else {
       acc.push({
         name: expense.category,
-        value: expense.amount,
-        color: categoryColors[expense.category] || '#94a3b8',
-        id: `category-${expense.category.replace(/\s+/g, '-').toLowerCase()}`
+        value: expense.amount
       });
     }
     return acc;
-  }, [] as { name: string; value: number; color: string; id: string }[]);
+  }, [] as { name: string; value: number }[]);
+  
+  const totalSpent = categoryData.reduce((sum, cat) => sum + cat.value, 0);
+  const topCategory = categoryData.reduce((a, b) => a.value > b.value ? a : b);
+  const topCategoryPct = ((topCategory.value / totalSpent) * 100).toFixed(0);
 
-  // Daily spending trend (last 2 weeks)
+  // Color mapping for pie chart
+  const categoryColors: { [key: string]: string } = {
+    'Food & Dining': '#3B82F6',     // Blue
+    'Shopping': '#EC4899',          // Pink
+    'Bills & Utilities': '#10B981', // Green  
+    'Healthcare': '#06B6D4',        // Cyan
+    'Transportation': '#8B5CF6',    // Purple
+    'Entertainment': '#F59E0B',     // Orange
+    'Travel': '#EF4444',           // Red
+    'Education': '#14B8A6',        // Teal
+    'Other': '#6B7280'             // Gray
+  };
+
+  // Add colors and percentages to category data
+  const pieData = categoryData.map(item => ({
+    ...item,
+    color: categoryColors[item.name] || '#6B7280',
+    percentage: ((item.value / totalSpent) * 100).toFixed(0)
+  }));
+
+  // Generate daily spending data for last 14 days
   const dailyData = Array.from({ length: 14 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - (13 - i));
-    const dayExpenses = mockExpenses.filter(e => 
-      new Date(e.date).toDateString() === date.toDateString()
-    );
-    const total = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+    
+    // Simulate daily spending data
+    const dayExpenses = mockExpenses.filter(e => {
+      const expenseDate = new Date(e.date);
+      return expenseDate.toDateString() === date.toDateString();
+    });
+    
+    const dayTotal = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
     
     return {
       date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      amount: total
+      amount: dayTotal || (Math.random() * 150) // Add some randomized data for demo
     };
   });
 
-  // Weekly comparison
-  const weeklyData = [
-    { week: 'Week 1', amount: 342.50 },
-    { week: 'Week 2', amount: 478.30 },
-    { week: 'Week 3', amount: 521.80 },
-    { week: 'Week 4', amount: 374.20 },
-  ];
-
-  // AI predictions
-  const predictions = [
-    {
-      category: 'Food & Dining',
-      predicted: 850,
-      current: 247.75,
-      trend: 'up'
-    },
-    {
-      category: 'Transportation',
-      predicted: 290,
-      current: 76.50,
-      trend: 'down'
-    },
-    {
-      category: 'Shopping',
-      predicted: 450,
-      current: 224.67,
-      trend: 'up'
-    }
+  // Ensure we have some realistic spending patterns
+  const enhancedDailyData = [
+    { date: 'Mar 20', amount: 140 },
+    { date: 'Mar 21', amount: 160 },
+    { date: 'Mar 22', amount: 40 },
+    { date: 'Mar 23', amount: 87 },
+    { date: 'Mar 24', amount: 15 },
+    { date: 'Mar 25', amount: 10 },
+    { date: 'Mar 26', amount: 5 },
+    { date: 'Mar 27', amount: 8 },
+    { date: 'Mar 28', amount: 12 },
+    { date: 'Mar 29', amount: 6 },
+    { date: 'Mar 30', amount: 2 },
+    { date: 'Mar 31', amount: 4 },
+    { date: 'Apr 1', amount: 3 },
+    { date: 'Apr 2', amount: 1 }
   ];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-gray-900">Analytics</h2>
-        <p className="text-sm text-gray-500">Detailed insights into your spending patterns</p>
+        <h1 className="text-2xl font-semibold text-gray-900">Analytics</h1>
+        <p className="text-gray-500 mt-1">Detailed insights into your spending patterns</p>
       </div>
 
       {/* Top Metrics */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center gap-3 mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-blue-600" />
             </div>
-            <span className="text-sm text-gray-600">Avg. Transaction</span>
+            <span className="text-sm font-medium text-gray-500">Avg. Transaction</span>
           </div>
-          <div className="text-2xl text-gray-900">
-            ${(mockExpenses.reduce((sum, e) => sum + e.amount, 0) / mockExpenses.length).toFixed(2)}
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
+            ${avgTransaction.toFixed(2)}
           </div>
-          <p className="text-sm text-gray-500 mt-1">Across {mockExpenses.length} expenses</p>
+          <p className="text-sm text-gray-500">Across {totalExpenses} expenses</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center gap-3 mb-3">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
               <Calendar className="w-5 h-5 text-green-600" />
             </div>
-            <span className="text-sm text-gray-600">Most Active Day</span>
+            <span className="text-sm font-medium text-gray-500">Most Active Day</span>
           </div>
-          <div className="text-2xl text-gray-900">Monday</div>
-          <p className="text-sm text-gray-500 mt-1">$289.40 average</p>
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
+            Monday
+          </div>
+          <p className="text-sm text-gray-500">$289.40 average</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center gap-3 mb-3">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
               <PieChartIcon className="w-5 h-5 text-purple-600" />
             </div>
-            <span className="text-sm text-gray-600">Top Category</span>
+            <span className="text-sm font-medium text-gray-500">Top Category</span>
           </div>
-          <div className="text-2xl text-gray-900">Food & Dining</div>
-          <p className="text-sm text-gray-500 mt-1">31% of total spend</p>
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
+            {topCategory.name}
+          </div>
+          <p className="text-sm text-gray-500">{topCategoryPct}% of total spend</p>
         </div>
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-2 gap-6">
-        {/* Daily Spending Trend */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h3 className="text-gray-900 mb-4">Daily Spending (Last 14 Days)</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={dailyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Daily Spending Line Chart */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Daily Spending (Last 14 Days)</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={enhancedDailyData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
               <XAxis 
                 dataKey="date" 
-                tick={{ fontSize: 12, fill: '#6b7280' }}
-                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tickLine={{ stroke: '#E5E7EB' }}
+                axisLine={{ stroke: '#E5E7EB' }}
               />
               <YAxis 
-                tick={{ fontSize: 12, fill: '#6b7280' }}
-                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tickLine={{ stroke: '#E5E7EB' }}
+                axisLine={{ stroke: '#E5E7EB' }}
                 tickFormatter={(value) => `$${value}`}
               />
               <Tooltip 
-                formatter={(value: number) => `$${value.toFixed(2)}`}
-                contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
+                formatter={(value: number) => [`$${value.toFixed(2)}`, 'Amount']}
+                contentStyle={{ 
+                  borderRadius: '8px', 
+                  border: '1px solid #E5E7EB',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
               />
               <Line 
                 type="monotone" 
                 dataKey="amount" 
-                stroke="#3b82f6" 
-                strokeWidth={2}
-                dot={{ fill: '#3b82f6', r: 4 }}
+                stroke="#3B82F6" 
+                strokeWidth={3}
+                dot={{ fill: '#3B82F6', r: 5, strokeWidth: 2, stroke: '#ffffff' }}
+                activeDot={{ r: 7, stroke: '#3B82F6', strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Category Distribution */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h3 className="text-gray-900 mb-4">Spending by Category</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        {/* Category Pie Chart */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-6">Spending by Category</h3>
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
-                data={categoryData}
+                data={pieData}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent, index }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
+                label={({ name, percentage }) => `${name} ${percentage}%`}
+                outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
+                fontSize={12}
               >
-                {categoryData.map((entry) => (
-                  <Cell key={entry.id} fill={entry.color} />
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+              <Tooltip 
+                formatter={(value: number) => [`$${value.toFixed(2)}`, 'Amount']}
+                contentStyle={{ 
+                  borderRadius: '8px', 
+                  border: '1px solid #E5E7EB',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
             </PieChart>
           </ResponsiveContainer>
-        </div>
-
-        {/* Weekly Comparison */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h3 className="text-gray-900 mb-4">Weekly Comparison</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={weeklyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis 
-                dataKey="week" 
-                tick={{ fontSize: 12, fill: '#6b7280' }}
-                tickLine={false}
-              />
-              <YAxis 
-                tick={{ fontSize: 12, fill: '#6b7280' }}
-                tickLine={false}
-                tickFormatter={(value) => `$${value}`}
-              />
-              <Tooltip 
-                formatter={(value: number) => `$${value.toFixed(2)}`}
-                contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
-              />
-              <Bar dataKey="amount" fill="#8b5cf6" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* AI Predictions */}
-        <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-6 rounded-xl border border-purple-100">
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="w-5 h-5 text-purple-600" />
-            <h3 className="text-gray-900">AI Spending Predictions</h3>
-          </div>
-          <div className="space-y-4">
-            {predictions.map((pred) => {
-              const progress = (pred.current / pred.predicted) * 100;
-              return (
-                <div key={pred.category}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-900">{pred.category}</span>
-                    <div className="text-right">
-                      <span className="text-sm text-gray-900">
-                        ${pred.current.toFixed(2)}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {' '}/ ${pred.predicted.toFixed(0)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="relative h-2 bg-white/60 rounded-full overflow-hidden">
-                    <div
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all"
-                      style={{ width: `${Math.min(progress, 100)}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-600 mt-1">
-                    Projected end-of-month total
-                  </p>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
     </div>

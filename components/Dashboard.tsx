@@ -75,98 +75,94 @@ export function Dashboard() {
     return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-gray-900 mb-2">Overview</h2>
-        <p className="text-sm text-gray-500">{currentMonth}</p>
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Overview</h2>
+        <p className="text-gray-500">{currentMonth}</p>
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-600">Total Spent</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-medium text-gray-600">Total Spent</span>
             <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-blue-600" />
             </div>
           </div>
-          <div className="text-2xl text-gray-900 mb-1">
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
             ${totalSpent.toFixed(2)}
           </div>
-          <div className="flex items-center gap-1 text-sm">
-            <span className="text-gray-500">Total spending this month</span>
+          <div className="text-sm text-gray-500">
+            Total spending this month
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-600">Transactions</span>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-medium text-gray-600">Transactions</span>
             <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
               <Receipt className="w-5 h-5 text-purple-600" />
             </div>
           </div>
-          <div className="text-2xl text-gray-900 mb-1">
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
             {mockExpenses.length}
           </div>
-          <div className="flex items-center gap-1 text-sm">
-            <span className="text-purple-600">
-              {mockExpenses.filter(e => new Date(e.date).toLocaleDateString('en-US', { month: 'short' }) === 'Mar').length} this month
-            </span>
+          <div className="text-sm text-purple-600 font-medium">
+            {mockExpenses.length} this month
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-600">Avg. Daily</span>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-medium text-gray-600">Avg. Daily</span>
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-green-600" />
             </div>
           </div>
-          <div className="text-2xl text-gray-900 mb-1">
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
             ${avgDaily.toFixed(2)}
           </div>
-          <div className="flex items-center gap-1 text-sm">
-            <span className="text-gray-500">per day</span>
+          <div className="text-sm text-gray-500">
+            per day
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-600">Recurring</span>
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-medium text-gray-600">Recurring</span>
             <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center">
               <CreditCard className="w-5 h-5 text-orange-600" />
             </div>
           </div>
-          <div className="text-2xl text-gray-900 mb-1">
+          <div className="text-3xl font-semibold text-gray-900 mb-2">
             ${recurringExpenses.toFixed(2)}
           </div>
-          <div className="flex items-center gap-1 text-sm">
-            <span className="text-gray-500">
-              {mockExpenses.filter(e => e.recurring).length} subscriptions
-            </span>
+          <div className="text-sm text-gray-500">
+            {mockExpenses.filter(e => e.recurring).length} subscriptions
           </div>
         </div>
       </div>
 
       {/* AI Insights */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 sm:p-6 rounded-xl border border-blue-100">
-        <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
-          <h3 className="text-gray-900 text-base">AI Insights</h3>
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-100">
+        <div className="flex items-center gap-2 mb-2">
+          <Sparkles className="w-5 h-5 text-purple-600" />
+          <h3 className="text-lg font-semibold text-gray-900">AI Insights</h3>
         </div>
-        <p className="text-xs sm:text-sm text-gray-600 mb-3">Smart predictions and recommendations based on your spending patterns</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+        <p className="text-sm text-gray-600 mb-4">Smart predictions and recommendations based on your spending patterns</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {aiInsights.map((insight, idx) => (
             <div
               key={idx}
-              className={`p-3 rounded-lg border ${getInsightBg(insight.type)}`}
+              className={`p-4 rounded-lg border ${getInsightBg(insight.type)}`}
             >
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 mt-0.5">
                   {getInsightIcon(insight.type)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-xs sm:text-sm text-gray-900 mb-0.5">{insight.title}</h4>
-                  <p className="text-xs text-gray-600">{insight.message}</p>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">{insight.title}</h4>
+                  <p className="text-sm text-gray-600">{insight.message}</p>
                 </div>
               </div>
             </div>
@@ -175,15 +171,15 @@ export function Dashboard() {
       </div>
 
       {/* Recent Expenses */}
-      <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200">
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 className="text-gray-900 text-base">Recent Expenses</h3>
+      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Recent Expenses</h3>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Pie Chart */}
           <div>
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={pieData}
@@ -191,7 +187,7 @@ export function Dashboard() {
                   cy="50%"
                   labelLine={false}
                   label={({ name, percent }) => `${name.split(' ')[0]} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
+                  outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
                 >
@@ -205,38 +201,36 @@ export function Dashboard() {
                 />
               </PieChart>
             </ResponsiveContainer>
-            <p className="text-xs text-gray-500 text-center mt-2">
+            <p className="text-sm text-gray-500 text-center mt-2">
               Category breakdown of last 5 expenses
             </p>
           </div>
 
           {/* Expenses List */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             {recentExpenses.map((expense) => (
               <div
                 key={expense.id}
-                className="flex items-center justify-between p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors border border-gray-100"
               >
-                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                <div className="flex items-center gap-4 min-w-0 flex-1">
                   <div 
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: `${categoryColors[expense.category]}20` }}
                   >
                     <Receipt 
-                      className="w-4 h-4 sm:w-5 sm:h-5" 
+                      className="w-5 h-5" 
                       style={{ color: categoryColors[expense.category] }}
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-xs sm:text-sm text-gray-900 truncate">{expense.description}</div>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs text-gray-500 truncate">{expense.category}</span>
-                    </div>
+                    <div className="text-sm font-medium text-gray-900 truncate">{expense.description}</div>
+                    <div className="text-sm text-gray-500 mt-1">{expense.category}</div>
                   </div>
                 </div>
-                <div className="text-right ml-2 flex-shrink-0">
-                  <div className="text-xs sm:text-sm text-gray-900">${expense.amount.toFixed(2)}</div>
-                  <div className="text-xs text-gray-500">
+                <div className="text-right ml-4 flex-shrink-0">
+                  <div className="text-sm font-semibold text-gray-900">${expense.amount.toFixed(2)}</div>
+                  <div className="text-sm text-gray-500 mt-1">
                     {new Date(expense.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </div>
                 </div>

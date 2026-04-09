@@ -42,16 +42,48 @@ export const categories = [
 export const mockExpenses: Expense[] = [
   {
     id: '1',
-    date: '2026-03-24',
+    date: '2026-03-23',
     description: 'Whole Foods Market',
     amount: 87.45,
     category: 'Food & Dining',
     aiConfidence: 0.95,
-    tags: ['groceries']
+    tags: ['groceries'],
+    receiptItems: [
+      {
+        id: '1-1',
+        description: 'Organic Bananas',
+        amount: 4.99,
+        category: 'Food & Dining'
+      },
+      {
+        id: '1-2', 
+        description: 'Almond Milk',
+        amount: 5.49,
+        category: 'Food & Dining'
+      },
+      {
+        id: '1-3',
+        description: 'Organic Spinach',
+        amount: 3.99,
+        category: 'Food & Dining'
+      },
+      {
+        id: '1-4',
+        description: 'Chicken Breast',
+        amount: 12.99,
+        category: 'Food & Dining'
+      },
+      {
+        id: '1-5',
+        description: 'Greek Yogurt',
+        amount: 6.49,
+        category: 'Food & Dining'
+      }
+    ]
   },
   {
     id: '2',
-    date: '2026-03-23',
+    date: '2026-03-22',
     description: 'Uber Ride',
     amount: 24.50,
     category: 'Transportation',
@@ -60,7 +92,7 @@ export const mockExpenses: Expense[] = [
   },
   {
     id: '3',
-    date: '2026-03-23',
+    date: '2026-03-22',
     description: 'Netflix Subscription',
     amount: 15.99,
     category: 'Entertainment',
@@ -70,16 +102,42 @@ export const mockExpenses: Expense[] = [
   },
   {
     id: '4',
-    date: '2026-03-22',
+    date: '2026-03-21',
     description: 'Amazon Purchase',
     amount: 156.78,
     category: 'Shopping',
     aiConfidence: 0.88,
-    tags: ['online', 'electronics']
+    tags: ['online', 'electronics'],
+    receiptItems: [
+      {
+        id: '4-1',
+        description: 'Wireless Mouse',
+        amount: 29.99,
+        category: 'Shopping'
+      },
+      {
+        id: '4-2',
+        description: 'USB-C Cable',
+        amount: 15.99,
+        category: 'Shopping'
+      },
+      {
+        id: '4-3',
+        description: 'Phone Case',
+        amount: 24.99,
+        category: 'Shopping'
+      },
+      {
+        id: '4-4',
+        description: 'Bluetooth Headphones',
+        amount: 79.99,
+        category: 'Shopping'
+      }
+    ]
   },
   {
     id: '5',
-    date: '2026-03-21',
+    date: '2026-03-20',
     description: 'Electric Bill',
     amount: 142.30,
     category: 'Bills & Utilities',
