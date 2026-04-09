@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Bell, 
   Palette, 
@@ -19,22 +19,68 @@ type SettingsKeys = 'darkMode' | 'notifications' | 'emailNotifications' | 'weekl
 
 type SettingsState = Record<SettingsKeys, boolean>;
 
+const DEFAULT_SETTINGS: SettingsState = {
+  darkMode: false,
+  notifications: true,
+  emailNotifications: true,
+  weeklyReports: true,
+  compactView: false,
+  autoCategorize: true,
+  aiInsights: true,
+  spendingPredictions: false,
+  dataSharing: false,
+  analytics: true,
+};
+
 export function Settings() {
-  const [settings, setSettings] = useState<SettingsState>({
-    darkMode: false,
-    notifications: true,
-    emailNotifications: true,
-    weeklyReports: true,
-    compactView: false,
-    autoCategorize: true,
-    aiInsights: true,
-    spendingPredictions: false,
-    dataSharing: false,
-    analytics: true,
-  });
+  const [settings, setSettings] = useState<SettingsState>(DEFAULT_SETTINGS);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Load settings from localStorage on component mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem('expenseTracker_settings');
+    if (savedSettings) {
+      try {
+        const parsed = JSON.parse(savedSettings);
+        setSettings(prev => ({ ...prev, ...parsed }));
+      } catch (error) {
+        console.error('Failed to parse saved settings:', error);
+      }
+    }
+  }, []);
 
   const toggleSetting = (key: SettingsKeys) => {
     setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+    setHasChanges(true);
+  };
+
+  const saveSettings = () => {
+    localStorage.setItem('expenseTracker_settings', JSON.stringify(settings));
+    setHasChanges(false);
+    
+    // Show success toast
+    if ((window as any).addToast) {
+      (window as any).addToast({
+        message: 'Settings saved successfully!',
+        type: 'success'
+      });
+    }
+  };
+
+  const resetToDefault = () => {
+    if (window.confirm('Are you sure you want to reset all settings to default? This action cannot be undone.')) {
+      setSettings(DEFAULT_SETTINGS);
+      localStorage.removeItem('expenseTracker_settings');
+      setHasChanges(false);
+      
+      // Show success toast
+      if ((window as any).addToast) {
+        (window as any).addToast({
+          message: 'Settings reset to default values',
+          type: 'info'
+        });
+      }
+    }
   };
 
   return (
@@ -73,14 +119,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('darkMode')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  settings.darkMode ? 'bg-blue-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.darkMode ? 'bg-blue-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.darkMode ? '#2563eb' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.darkMode ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.darkMode ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -97,14 +154,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('compactView')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                  settings.compactView ? 'bg-blue-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.compactView ? 'bg-blue-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.compactView ? '#2563eb' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.compactView ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.compactView ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -138,14 +206,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('emailNotifications')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
-                  settings.emailNotifications ? 'bg-emerald-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.emailNotifications ? 'bg-emerald-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.emailNotifications ? '#059669' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.emailNotifications ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.emailNotifications ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -162,14 +241,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('weeklyReports')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
-                  settings.weeklyReports ? 'bg-emerald-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.weeklyReports ? 'bg-emerald-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.weeklyReports ? '#059669' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.weeklyReports ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.weeklyReports ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -203,14 +293,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('autoCategorize')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                  settings.autoCategorize ? 'bg-purple-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.autoCategorize ? 'bg-purple-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.autoCategorize ? '#9333ea' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.autoCategorize ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.autoCategorize ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -227,14 +328,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('aiInsights')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                  settings.aiInsights ? 'bg-purple-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.aiInsights ? 'bg-purple-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.aiInsights ? '#9333ea' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.aiInsights ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.aiInsights ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -251,14 +363,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('spendingPredictions')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                  settings.spendingPredictions ? 'bg-purple-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.spendingPredictions ? 'bg-purple-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.spendingPredictions ? '#9333ea' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.spendingPredictions ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.spendingPredictions ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -292,14 +415,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('dataSharing')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-                  settings.dataSharing ? 'bg-indigo-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.dataSharing ? 'bg-indigo-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.dataSharing ? '#4f46e5' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.dataSharing ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.dataSharing ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -316,14 +450,25 @@ export function Settings() {
               </div>
               <button
                 onClick={() => toggleSetting('analytics')}
-                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-                  settings.analytics ? 'bg-indigo-600' : 'bg-gray-200'
+                className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer ${
+                  settings.analytics ? 'bg-indigo-600' : 'bg-gray-300'
                 }`}
+                style={{
+                  minWidth: '48px',
+                  minHeight: '28px',
+                  backgroundColor: settings.analytics ? '#4f46e5' : '#d1d5db'
+                }}
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-lg transition-all duration-200 ${
                     settings.analytics ? 'translate-x-6' : 'translate-x-1'
                   }`}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    width: '20px',
+                    height: '20px',
+                    transform: settings.analytics ? 'translateX(20px)' : 'translateX(4px)'
+                  }}
                 />
               </button>
             </div>
@@ -342,13 +487,34 @@ export function Settings() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-3 pt-4">
-          <button className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            Reset to Default
-          </button>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            Save Changes
-          </button>
+        <div className="flex justify-between items-center pt-4">
+          {hasChanges && (
+            <div className="flex items-center gap-2 text-sm text-amber-600">
+              <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+              You have unsaved changes
+            </div>
+          )}
+          {!hasChanges && <div></div>}
+          
+          <div className="flex gap-3">
+            <button 
+              onClick={resetToDefault}
+              className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Reset to Default
+            </button>
+            <button 
+              onClick={saveSettings}
+              disabled={!hasChanges}
+              className={`px-6 py-3 rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                hasChanges 
+                  ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>

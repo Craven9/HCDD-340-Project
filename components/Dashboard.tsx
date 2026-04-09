@@ -73,23 +73,23 @@ export function Dashboard() {
   };
 
     return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">Overview</h2>
-        <p className="text-gray-500">{currentMonth}</p>
+    <div className="space-y-10">
+      {/* Header - Enhanced */}
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-3">Overview</h2>
+        <p className="text-lg text-gray-600 font-medium">{currentMonth}</p>
       </div>
 
-      {/* Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+      {/* Metrics Grid - Force 2x2 layout on desktop */}
+      <div className="dashboard-grid min-grid-width">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600">Total Spent</span>
-            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-blue-600" />
+            <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Total Spent</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+              <DollarSign className="w-6 h-6 text-white" />
             </div>
           </div>
-          <div className="text-3xl font-semibold text-gray-900 mb-2">
+          <div className="text-3xl font-bold text-gray-900 mb-2">
             ${totalSpent.toFixed(2)}
           </div>
           <div className="text-sm text-gray-500">
@@ -97,29 +97,29 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600">Transactions</span>
-            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-              <Receipt className="w-5 h-5 text-purple-600" />
+            <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Transactions</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Receipt className="w-6 h-6 text-white" />
             </div>
           </div>
-          <div className="text-3xl font-semibold text-gray-900 mb-2">
+          <div className="text-3xl font-bold text-gray-900 mb-2">
             {mockExpenses.length}
           </div>
-          <div className="text-sm text-purple-600 font-medium">
+          <div className="text-sm font-semibold" style={{ color: '#8b5cf6' }}>
             {mockExpenses.length} this month
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600">Avg. Daily</span>
-            <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-green-600" />
+            <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Avg. Daily</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+              <TrendingUp className="w-6 h-6 text-white" />
             </div>
           </div>
-          <div className="text-3xl font-semibold text-gray-900 mb-2">
+          <div className="text-3xl font-bold text-gray-900 mb-2">
             ${avgDaily.toFixed(2)}
           </div>
           <div className="text-sm text-gray-500">
@@ -127,14 +127,14 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600">Recurring</span>
-            <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center">
-              <CreditCard className="w-5 h-5 text-orange-600" />
+            <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Recurring</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+              <CreditCard className="w-6 h-6 text-white" />
             </div>
           </div>
-          <div className="text-3xl font-semibold text-gray-900 mb-2">
+          <div className="text-3xl font-bold text-gray-900 mb-2">
             ${recurringExpenses.toFixed(2)}
           </div>
           <div className="text-sm text-gray-500">
@@ -143,26 +143,30 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* AI Insights */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-100">
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-5 h-5 text-purple-600" />
-          <h3 className="text-lg font-semibold text-gray-900">AI Insights</h3>
+      {/* AI Insights - Enhanced design */}
+      <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-gray-900">AI Insights</h3>
+            <p className="text-sm text-gray-600">Smart predictions and recommendations based on your spending patterns</p>
+          </div>
         </div>
-        <p className="text-sm text-gray-600 mb-4">Smart predictions and recommendations based on your spending patterns</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="dashboard-insights-grid min-grid-width">
           {aiInsights.map((insight, idx) => (
             <div
               key={idx}
-              className={`p-4 rounded-lg border ${getInsightBg(insight.type)}`}
+              className={`p-6 rounded-2xl border hover:shadow-lg transition-all duration-300 cursor-pointer group hover:scale-102 ${getInsightBg(insight.type)}`}
             >
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-0.5">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 mt-1 group-hover:scale-110 transition-transform duration-200">
                   {getInsightIcon(insight.type)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">{insight.title}</h4>
-                  <p className="text-sm text-gray-600">{insight.message}</p>
+                  <h4 className="text-base font-bold text-gray-900 mb-2">{insight.title}</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed">{insight.message}</p>
                 </div>
               </div>
             </div>
@@ -170,53 +174,72 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Recent Expenses */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Recent Expenses</h3>
+      {/* Recent Expenses - Enhanced layout */}
+      <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+        <div className="flex items-center justify-between mb-8">
+          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <Receipt className="w-4 h-4 text-white" />
+            </div>
+            Recent Expenses
+          </h3>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Pie Chart */}
-          <div>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name.split(' ')[0]} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={100}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {pieData.map((entry) => (
-                    <Cell key={entry.id} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  formatter={(value: number) => `$${value.toFixed(2)}`}
-                  contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            <p className="text-sm text-gray-500 text-center mt-2">
+        <div className="dashboard-expenses-grid min-grid-width">
+          {/* Pie Chart - Enhanced */}
+          <div className="flex flex-col bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-100">
+            <div className="flex-1">
+              <ResponsiveContainer width="100%" height={320}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percent }) => `${name.split(' ')[0]} ${(percent * 100).toFixed(0)}%`}
+                    outerRadius={110}
+                    innerRadius={45}
+                    fill="#8884d8"
+                    dataKey="value"
+                    strokeWidth={2}
+                    stroke="#ffffff"
+                  >
+                    {pieData.map((entry) => (
+                      <Cell key={entry.id} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value: number) => `$${value.toFixed(2)}`}
+                    contentStyle={{ 
+                      borderRadius: '12px', 
+                      border: '1px solid #e5e7eb',
+                      backgroundColor: 'white',
+                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="text-sm font-medium text-gray-600 text-center mt-4 bg-white px-4 py-2 rounded-lg">
               Category breakdown of last 5 expenses
             </p>
           </div>
 
-          {/* Expenses List */}
+          {/* Expenses List - Enhanced styling */}
           <div className="space-y-3">
+            <h4 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+              <Receipt className="w-4 h-4" />
+              Recent Transactions
+            </h4>
             {recentExpenses.map((expense) => (
               <div
                 key={expense.id}
-                className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors border border-gray-100"
+                className="group flex items-center justify-between p-4 bg-gray-50 hover:bg-white rounded-xl transition-all duration-200 border border-gray-100 hover:border-gray-200 hover:shadow-md cursor-pointer"
               >
                 <div className="flex items-center gap-4 min-w-0 flex-1">
                   <div 
-                    className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: `${categoryColors[expense.category]}20` }}
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-200"
+                    style={{ backgroundColor: `${categoryColors[expense.category]}15`, border: `1px solid ${categoryColors[expense.category]}30` }}
                   >
                     <Receipt 
                       className="w-5 h-5" 
@@ -224,13 +247,17 @@ export function Dashboard() {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-gray-900 truncate">{expense.description}</div>
-                    <div className="text-sm text-gray-500 mt-1">{expense.category}</div>
+                    <div className="text-sm font-semibold text-gray-900 truncate">{expense.description}</div>
+                    <div className="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                      <span className="px-2 py-1 bg-white rounded-md text-xs font-medium" style={{ color: categoryColors[expense.category], backgroundColor: `${categoryColors[expense.category]}10` }}>
+                        {expense.category}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="text-right ml-4 flex-shrink-0">
-                  <div className="text-sm font-semibold text-gray-900">${expense.amount.toFixed(2)}</div>
-                  <div className="text-sm text-gray-500 mt-1">
+                  <div className="text-sm font-bold text-gray-900">${expense.amount.toFixed(2)}</div>
+                  <div className="text-xs text-gray-400 mt-1">
                     {new Date(expense.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </div>
                 </div>

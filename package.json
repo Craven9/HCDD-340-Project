@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:port": "vite --port 3000",
+    "dev:host": "vite --host",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules/.vite"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
